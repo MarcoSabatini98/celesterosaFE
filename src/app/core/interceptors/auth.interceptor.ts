@@ -1,6 +1,6 @@
 import { HttpInterceptorFn } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { SessionService } from '../services/session.service';
+import { SessionService } from '../services/session-service/session.service';
 import { environment } from '../../../environments/environment';
 
 // Aggiunge il bearer token JWT e l'header X-Cart-Token (per i guest) alle

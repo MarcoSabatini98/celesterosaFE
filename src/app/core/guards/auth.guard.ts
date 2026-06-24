@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { SessionService } from '../services/session.service';
+import { SessionService } from '../services/session-service/session.service';
 
 // Protegge le rotte riservate ai clienti autenticati.
 export const authGuard: CanActivateFn = (_route, state) => {

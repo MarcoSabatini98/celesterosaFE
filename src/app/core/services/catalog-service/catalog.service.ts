@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { ApiResponse, Paginated } from '../models/common.models';
+import { environment } from '../../../../environments/environment';
+import { ApiResponse, Paginated } from '../../models/common.models';
 import {
   Brand,
   Category,
@@ -10,7 +10,7 @@ import {
   ProductCard,
   ProductDetail,
   ProductQuery,
-} from '../models/catalog.models';
+} from '../../models/catalog.models';
 
 @Injectable({ providedIn: 'root' })
 export class CatalogService {

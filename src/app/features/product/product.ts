@@ -1,7 +1,7 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { CatalogService } from '../../core/services/catalog.service';
-import { CartService } from '../../core/services/cart.service';
+import { CatalogService } from '../../core/services/catalog-service/catalog.service';
+import { CartService } from '../../core/services/cart-service/cart.service';
 import { ProductDetail, ProductVariant } from '../../core/models/catalog.models';
 import { EuroPipe } from '../../shared/pipes/euro.pipe';
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CartService } from '../../core/services/cart.service';
+import { CartService } from '../../core/services/cart-service/cart.service';
 import { CartItem } from '../../core/models/order.models';
 import { EuroPipe } from '../../shared/pipes/euro.pipe';
 

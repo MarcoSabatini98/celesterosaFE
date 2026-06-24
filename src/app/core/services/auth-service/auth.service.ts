@@ -1,10 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, tap } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { ApiResponse } from '../models/common.models';
-import { AuthResult, AuthUser, LoginPayload, RegisterPayload } from '../models/auth.models';
-import { SessionService } from './session.service';
+import { environment } from '../../../../environments/environment';
+import { ApiResponse } from '../../models/common.models';
+import { AuthResult, AuthUser, LoginPayload, RegisterPayload } from '../../models/auth.models';
+import { SessionService } from '../session-service/session.service';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {

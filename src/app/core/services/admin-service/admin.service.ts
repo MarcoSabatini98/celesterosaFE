@@ -1,11 +1,11 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
-import { environment } from '../../../environments/environment';
-import { ApiResponse, Paginated } from '../models/common.models';
-import { ProductDetail } from '../models/catalog.models';
-import { Order } from '../models/order.models';
-import { AdminProductInput, AdminVariantInput, OrderStatusUpdate } from '../models/admin.models';
+import { environment } from '../../../../environments/environment';
+import { ApiResponse, Paginated } from '../../models/common.models';
+import { ProductDetail } from '../../models/catalog.models';
+import { Order } from '../../models/order.models';
+import { AdminProductInput, AdminVariantInput, OrderStatusUpdate } from '../../models/admin.models';
 
 // Accesso alle rotte /admin del backend (richiede ruolo admin).
 @Injectable({ providedIn: 'root' })

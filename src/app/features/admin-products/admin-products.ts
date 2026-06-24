@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AdminService } from '../../core/services/admin.service';
+import { AdminService } from '../../core/services/admin-service/admin.service';
 import { ProductDetail } from '../../core/models/catalog.models';
 import { EuroPipe } from '../../shared/pipes/euro.pipe';
 

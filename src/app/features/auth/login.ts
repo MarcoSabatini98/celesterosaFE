@@ -2,8 +2,8 @@ import { Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AuthService } from '../../core/services/auth.service';
-import { CartService } from '../../core/services/cart.service';
+import { AuthService } from '../../core/services/auth-service/auth.service';
+import { CartService } from '../../core/services/cart-service/cart.service';
 
 @Component({
   selector: 'app-login',
