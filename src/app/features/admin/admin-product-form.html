@@ -121,4 +121,62 @@
       </button>
     </div>
   </section>
+
+  <!-- ATTRIBUTI (EAV, dipendono dalla categoria) -->
+  <section class="panel">
+    <h3>Scheda tecnica</h3>
+    @if (!attrDefs().length) {
+      <p class="muted">Nessun attributo definito per questa categoria.</p>
+    } @else {
+      <form class="attr-form" (ngSubmit)="saveAttributes()">
+        <div class="attr-grid">
+          @for (def of attrDefs(); track def.code) {
+            <div class="field">
+              <span>
+                {{ def.label }}
+                @if (def.unit) {
+                  <span class="muted">({{ def.unit }})</span>
+                }
+              </span>
+              @switch (def.data_type) {
+                @case ('boolean') {
+                  <label class="check inline">
+                    <input type="checkbox" [name]="def.code" [(ngModel)]="attrs[def.code]" />
+                    <span>Sì</span>
+                  </label>
+                }
+                @case ('number') {
+                  <input type="number" step="any" [name]="def.code" [(ngModel)]="attrs[def.code]" />
+                }
+                @case ('date') {
+                  <input type="date" [name]="def.code" [(ngModel)]="attrs[def.code]" />
+                }
+                @case ('enum') {
+                  <select [name]="def.code" [(ngModel)]="attrs[def.code]">
+                    <option value="">—</option>
+                    @for (opt of def.options; track opt) {
+                      <option [value]="opt">{{ opt }}</option>
+                    }
+                  </select>
+                }
+                @default {
+                  <input type="text" [name]="def.code" [(ngModel)]="attrs[def.code]" />
+                }
+              }
+            </div>
+          }
+        </div>
+
+        @if (attrError()) {
+          <p class="error mono">{{ attrError() }}</p>
+        }
+        @if (attrNotice()) {
+          <p class="notice mono">{{ attrNotice() }}</p>
+        }
+        <button type="submit" class="btn btn--ghost" [disabled]="savingAttrs()">
+          {{ savingAttrs() ? 'Salvo…' : 'Salva attributi' }}
+        </button>
+      </form>
+    }
+  </section>
 }
