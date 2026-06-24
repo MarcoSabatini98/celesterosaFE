@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { AdminService } from '../../core/services/admin.service';
+import { AdminService } from '../../core/services/admin-service/admin.service';
 import { Order } from '../../core/models/order.models';
 import { OrderStatusUpdate } from '../../core/models/admin.models';
 import { EuroPipe } from '../../shared/pipes/euro.pipe';

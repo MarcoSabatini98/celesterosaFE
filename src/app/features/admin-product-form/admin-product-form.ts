@@ -2,8 +2,8 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AdminService } from '../../core/services/admin.service';
-import { CatalogService } from '../../core/services/catalog.service';
+import { AdminService } from '../../core/services/admin-service/admin.service';
+import { CatalogService } from '../../core/services/catalog-service/catalog.service';
 import { AttributeDef, Brand, Category, ProductDetail } from '../../core/models/catalog.models';
 import { AdminProductInput, AdminVariantInput } from '../../core/models/admin.models';
 

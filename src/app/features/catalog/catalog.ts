@@ -1,6 +1,6 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { CatalogService } from '../../core/services/catalog.service';
+import { CatalogService } from '../../core/services/catalog-service/catalog.service';
 import {
   Brand,
   Category,

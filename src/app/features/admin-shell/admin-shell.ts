@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { SessionService } from '../../core/services/session.service';
+import { SessionService } from '../../core/services/session-service/session.service';
 
 @Component({
   selector: 'app-admin-shell',

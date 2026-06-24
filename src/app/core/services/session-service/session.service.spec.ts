@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { SessionService } from './session.service';
-import { AuthUser } from '../models/auth.models';
+import { AuthUser } from '../../models/auth.models';
 
 const user: AuthUser = {
   id: 1,

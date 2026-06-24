@@ -2,9 +2,9 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
-import { CartService } from '../../core/services/cart.service';
-import { CheckoutService } from '../../core/services/checkout.service';
-import { SessionService } from '../../core/services/session.service';
+import { CartService } from '../../core/services/cart-service/cart.service';
+import { CheckoutService } from '../../core/services/checkout-service/checkout.service';
+import { SessionService } from '../../core/services/session-service/session.service';
 import { Address, CheckoutPayload, Order } from '../../core/models/order.models';
 import { EuroPipe } from '../../shared/pipes/euro.pipe';
 

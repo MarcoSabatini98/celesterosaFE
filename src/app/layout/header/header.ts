@@ -1,8 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { ThemeService } from '../../core/services/theme.service';
-import { CartService } from '../../core/services/cart.service';
-import { SessionService } from '../../core/services/session.service';
+import { ThemeService } from '../../core/services/theme-service/theme.service';
+import { CartService } from '../../core/services/cart-service/cart.service';
+import { SessionService } from '../../core/services/session-service/session.service';
 
 @Component({
   selector: 'app-header',

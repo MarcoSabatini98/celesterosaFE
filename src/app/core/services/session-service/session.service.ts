@@ -1,5 +1,5 @@
 import { Injectable, computed, signal } from '@angular/core';
-import { AuthUser } from '../models/auth.models';
+import { AuthUser } from '../../models/auth.models';
 
 const ACCESS = 'celesterosa-access';
 const REFRESH = 'celesterosa-refresh';
