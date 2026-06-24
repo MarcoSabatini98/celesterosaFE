@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CartService } from '../../core/services/cart.service';
 import { CartItem } from '../../core/models/order.models';
@@ -13,9 +13,14 @@ import { EuroPipe } from '../../shared/pipes/euro.pipe';
 export class CartPage implements OnInit {
   protected cart = inject(CartService);
   protected readonly model = this.cart.cart;
+  // Evita il flash di "carrello vuoto" durante il primo caricamento.
+  protected readonly loaded = signal(false);
 
   ngOnInit(): void {
-    this.cart.load().subscribe({ error: () => {} });
+    this.cart.load().subscribe({
+      next: () => this.loaded.set(true),
+      error: () => this.loaded.set(true),
+    });
   }
 
   inc(item: CartItem): void {
