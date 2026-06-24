@@ -5,7 +5,15 @@ import { environment } from '../../../../environments/environment';
 import { ApiResponse, Paginated } from '../../models/common.models';
 import { ProductDetail } from '../../models/catalog.models';
 import { Order } from '../../models/order.models';
-import { AdminProductInput, AdminVariantInput, OrderStatusUpdate } from '../../models/admin.models';
+import {
+  AdminBrand,
+  AdminBrandInput,
+  AdminCategory,
+  AdminCategoryInput,
+  AdminProductInput,
+  AdminVariantInput,
+  OrderStatusUpdate,
+} from '../../models/admin.models';
 
 // Accesso alle rotte /admin del backend (richiede ruolo admin).
 @Injectable({ providedIn: 'root' })
@@ -84,6 +92,56 @@ export class AdminService {
   updateOrderStatus(orderNumber: string, status: OrderStatusUpdate): Observable<Order> {
     return this.unwrap(
       this.http.patch<ApiResponse<Order>>(`${this.base}/orders/${orderNumber}/status`, { status }),
+    );
+  }
+
+  // Marche
+  listBrands(): Observable<AdminBrand[]> {
+    return this.unwrap(this.http.get<ApiResponse<AdminBrand[]>>(`${this.base}/brands`));
+  }
+
+  createBrand(input: AdminBrandInput): Observable<AdminBrand> {
+    return this.unwrap(this.http.post<ApiResponse<AdminBrand>>(`${this.base}/brands`, input));
+  }
+
+  updateBrand(id: number, input: Partial<AdminBrandInput>): Observable<AdminBrand> {
+    return this.unwrap(this.http.put<ApiResponse<AdminBrand>>(`${this.base}/brands/${id}`, input));
+  }
+
+  deleteBrand(id: number): Observable<unknown> {
+    return this.unwrap(this.http.delete<ApiResponse<unknown>>(`${this.base}/brands/${id}`));
+  }
+
+  uploadBrandLogo(id: number, file: File): Observable<AdminBrand> {
+    const form = new FormData();
+    form.append('logo', file);
+    return this.unwrap(this.http.post<ApiResponse<AdminBrand>>(`${this.base}/brands/${id}/logo`, form));
+  }
+
+  // Categorie
+  listCategories(): Observable<AdminCategory[]> {
+    return this.unwrap(this.http.get<ApiResponse<AdminCategory[]>>(`${this.base}/categories`));
+  }
+
+  createCategory(input: AdminCategoryInput): Observable<AdminCategory> {
+    return this.unwrap(this.http.post<ApiResponse<AdminCategory>>(`${this.base}/categories`, input));
+  }
+
+  updateCategory(id: number, input: Partial<AdminCategoryInput>): Observable<AdminCategory> {
+    return this.unwrap(
+      this.http.put<ApiResponse<AdminCategory>>(`${this.base}/categories/${id}`, input),
+    );
+  }
+
+  deleteCategory(id: number): Observable<unknown> {
+    return this.unwrap(this.http.delete<ApiResponse<unknown>>(`${this.base}/categories/${id}`));
+  }
+
+  uploadCategoryImage(id: number, file: File): Observable<AdminCategory> {
+    const form = new FormData();
+    form.append('image', file);
+    return this.unwrap(
+      this.http.post<ApiResponse<AdminCategory>>(`${this.base}/categories/${id}/image`, form),
     );
   }
 }

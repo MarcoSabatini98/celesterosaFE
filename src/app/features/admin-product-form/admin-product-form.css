@@ -75,6 +75,53 @@
   font-size: var(--step--1);
 }
 
+/* Creazione rapida inline (matita) per categoria/marca */
+.field-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+.pencil {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-s);
+  border: 1px solid var(--border-strong);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  line-height: 1;
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+.pencil:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+.inline-create {
+  display: flex;
+  gap: 0.4rem;
+}
+.inline-create input {
+  flex: 1;
+  padding: 0.65rem 0.75rem;
+  border-radius: var(--radius-m);
+  border: 1px solid var(--border-strong);
+  background: var(--bg-elev);
+  color: var(--text);
+}
+.inline-create input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--glow);
+}
+.inline-create .btn {
+  white-space: nowrap;
+}
+
 .error {
   color: var(--danger);
   font-size: var(--step--1);
@@ -146,6 +193,17 @@
 .img-upload:hover {
   border-color: var(--accent);
   color: var(--accent);
+}
+/* Variante inline per il form di creazione */
+.img-upload.inline {
+  aspect-ratio: auto;
+  padding: 0.7rem 1rem;
+  width: fit-content;
+  min-width: 200px;
+}
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--text-faint);
 }
 
 .variants {

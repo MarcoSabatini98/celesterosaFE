@@ -34,6 +34,12 @@ export const routes: Routes = [
     title: 'Accedi — celesterosa',
   },
   {
+    path: 'account',
+    canActivate: [authGuard],
+    loadComponent: () => import('./features/account/account').then((m) => m.AccountPage),
+    title: 'Il mio account — celesterosa',
+  },
+  {
     path: 'ordini',
     canActivate: [authGuard],
     loadComponent: () => import('./features/orders-list/orders-list').then((m) => m.OrdersListPage),
@@ -69,6 +75,16 @@ export const routes: Routes = [
         path: 'prodotti/:id',
         loadComponent: () =>
           import('./features/admin-product-form/admin-product-form').then((m) => m.AdminProductFormPage),
+      },
+      {
+        path: 'categorie',
+        loadComponent: () =>
+          import('./features/admin-categories/admin-categories').then((m) => m.AdminCategoriesPage),
+      },
+      {
+        path: 'marche',
+        loadComponent: () =>
+          import('./features/admin-brands/admin-brands').then((m) => m.AdminBrandsPage),
       },
     ],
     title: 'Admin — celesterosa',

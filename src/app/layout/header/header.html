@@ -42,12 +42,21 @@
         }
       </button>
 
-      <a [routerLink]="session.isAuthenticated() ? '/ordini' : '/accedi'" class="icon-btn" aria-label="Area cliente">
+      <a [routerLink]="session.isAuthenticated() ? '/account' : '/accedi'" class="icon-btn" aria-label="Area cliente">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7">
           <circle cx="12" cy="8" r="3.6" />
           <path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6" stroke-linecap="round" />
         </svg>
       </a>
+
+      @if (session.isAuthenticated()) {
+        <button type="button" class="icon-btn" (click)="logout()" aria-label="Esci">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7">
+            <path d="M15 4h2.5A1.5 1.5 0 0 1 19 5.5v13a1.5 1.5 0 0 1-1.5 1.5H15" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M10 12h9M16 9l3 3-3 3M10 4H5.5A1.5 1.5 0 0 0 4 5.5v13A1.5 1.5 0 0 0 5.5 20H10" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </button>
+      }
 
       <a routerLink="/carrello" class="icon-btn cart-btn" aria-label="Carrello">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7">

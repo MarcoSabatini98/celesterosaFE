@@ -14,25 +14,79 @@
   </div>
 
   <div class="row2">
-    <label class="field">
-      <span>Categoria</span>
-      <select name="category_id" [(ngModel)]="form.category_id" required>
-        <option [ngValue]="0" disabled>Seleziona…</option>
-        @for (c of categories(); track c.id) {
-          <option [ngValue]="c.id">{{ c.label }}</option>
-        }
-      </select>
-    </label>
-    <label class="field">
-      <span>Marca</span>
-      <select name="brand_id" [(ngModel)]="form.brand_id">
-        <option [ngValue]="null">— nessuna —</option>
-        @for (b of brands(); track b.id) {
-          <option [ngValue]="b.id">{{ b.name }}</option>
-        }
-      </select>
-    </label>
+    <!-- CATEGORIA (con creazione rapida) -->
+    <div class="field">
+      <span class="field-head">
+        Categoria
+        <button
+          type="button"
+          class="pencil"
+          (click)="toggleNewCategory()"
+          [attr.aria-label]="creatingCategory() ? 'Annulla' : 'Nuova categoria'"
+        >
+          {{ creatingCategory() ? '✕' : '✎' }}
+        </button>
+      </span>
+      @if (creatingCategory()) {
+        <div class="inline-create">
+          <input
+            name="newCategoryName"
+            [(ngModel)]="newCategoryName"
+            [ngModelOptions]="{ standalone: true }"
+            placeholder="Nome nuova categoria"
+            (keyup.enter)="confirmNewCategory()"
+          />
+          <button type="button" class="btn btn--ghost" (click)="confirmNewCategory()">Crea</button>
+        </div>
+        <small class="muted">Figlia della categoria selezionata, o di primo livello.</small>
+      } @else {
+        <select name="category_id" [(ngModel)]="form.category_id" required>
+          <option [ngValue]="0" disabled>Seleziona…</option>
+          @for (c of categories(); track c.id) {
+            <option [ngValue]="c.id">{{ c.label }}</option>
+          }
+        </select>
+      }
+    </div>
+
+    <!-- MARCA (con creazione rapida) -->
+    <div class="field">
+      <span class="field-head">
+        Marca
+        <button
+          type="button"
+          class="pencil"
+          (click)="toggleNewBrand()"
+          [attr.aria-label]="creatingBrand() ? 'Annulla' : 'Nuova marca'"
+        >
+          {{ creatingBrand() ? '✕' : '✎' }}
+        </button>
+      </span>
+      @if (creatingBrand()) {
+        <div class="inline-create">
+          <input
+            name="newBrandName"
+            [(ngModel)]="newBrandName"
+            [ngModelOptions]="{ standalone: true }"
+            placeholder="Nome nuova marca"
+            (keyup.enter)="confirmNewBrand()"
+          />
+          <button type="button" class="btn btn--ghost" (click)="confirmNewBrand()">Crea</button>
+        </div>
+      } @else {
+        <select name="brand_id" [(ngModel)]="form.brand_id">
+          <option [ngValue]="null">— nessuna —</option>
+          @for (b of brands(); track b.id) {
+            <option [ngValue]="b.id">{{ b.name }}</option>
+          }
+        </select>
+      }
+    </div>
   </div>
+
+  @if (taxoError()) {
+    <p class="error mono">{{ taxoError() }}</p>
+  }
 
   <div class="row2">
     <label class="field">
@@ -51,17 +105,39 @@
 
   <label class="field">
     <span>Descrizione breve</span>
-    <input name="short_description" [(ngModel)]="form.short_description" maxlength="500" />
+    <input
+      name="short_description"
+      [(ngModel)]="form.short_description"
+      maxlength="500"
+      placeholder="Es. La Stratocaster moderna, versatile e iconica."
+    />
   </label>
   <label class="field">
     <span>Descrizione</span>
-    <textarea name="description" rows="4" [(ngModel)]="form.description"></textarea>
+    <textarea
+      name="description"
+      rows="4"
+      [(ngModel)]="form.description"
+      placeholder="Descrizione completa: materiali, caratteristiche tecniche, suono, in dotazione…"
+    ></textarea>
   </label>
 
   <label class="check">
     <input type="checkbox" name="is_featured" [(ngModel)]="form.is_featured" />
     <span>In evidenza in home</span>
   </label>
+
+  <!-- IMMAGINI (in creazione: caricate al salvataggio) -->
+  @if (!isEdit) {
+    <div class="field">
+      <span>Immagini</span>
+      <label class="img-upload inline">
+        <input type="file" accept="image/*" multiple (change)="onPendingFiles($event)" hidden />
+        <span>{{ pendingFiles.length ? pendingFiles.length + ' file selezionati' : '+ Scegli immagini' }}</span>
+      </label>
+      <small class="muted">Verranno caricate dopo la creazione del prodotto.</small>
+    </div>
+  }
 
   @if (error()) {
     <p class="error mono">{{ error() }}</p>
