@@ -206,6 +206,21 @@
   border-color: var(--accent);
 }
 
+/* Editor attributi EAV */
+.attr-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+}
+.attr-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--space-s);
+}
+.attr-form button {
+  align-self: flex-start;
+}
+
 @media (max-width: 720px) {
   .row2 {
     grid-template-columns: 1fr;

@@ -4,7 +4,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AdminService } from '../../core/services/admin.service';
 import { CatalogService } from '../../core/services/catalog.service';
-import { Brand, Category, ProductDetail } from '../../core/models/catalog.models';
+import { AttributeDef, Brand, Category, ProductDetail } from '../../core/models/catalog.models';
 import { AdminProductInput, AdminVariantInput } from '../../core/models/admin.models';
 
 interface CatOption {
@@ -31,6 +31,13 @@ export class AdminProductFormPage implements OnInit {
   protected readonly saving = signal(false);
   protected readonly error = signal<string | null>(null);
   protected readonly notice = signal<string | null>(null);
+
+  // Attributi EAV: definizioni della categoria + valori correnti del prodotto.
+  protected readonly attrDefs = signal<AttributeDef[]>([]);
+  protected attrs: Record<string, string | number | boolean | null> = {};
+  protected readonly savingAttrs = signal(false);
+  protected readonly attrError = signal<string | null>(null);
+  protected readonly attrNotice = signal<string | null>(null);
 
   protected form: AdminProductInput = {
     category_id: 0,
@@ -88,8 +95,48 @@ export class AdminProductFormPage implements OnInit {
           base_price: Number(p.base_price),
           is_featured: p.is_featured,
         };
+        if (p.category?.slug) this.loadAttributes(p.category.slug);
       },
       error: () => {},
+    });
+  }
+
+  // Carica le definizioni degli attributi della categoria e precompila i valori
+  // correnti del prodotto (EAV).
+  private loadAttributes(slug: string): void {
+    this.catalog.category(slug).subscribe({
+      next: (cat) => {
+        this.attrDefs.set(cat.attributes);
+        const current = new Map(this.product()?.attributes.map((a) => [a.code, a.value]) ?? []);
+        const next: Record<string, string | number | boolean | null> = {};
+        for (const def of cat.attributes) {
+          next[def.code] = current.has(def.code)
+            ? (current.get(def.code) as string | number | boolean | null)
+            : def.data_type === 'boolean'
+              ? false
+              : '';
+        }
+        this.attrs = next;
+      },
+      error: () => {},
+    });
+  }
+
+  saveAttributes(): void {
+    if (!this.productId()) return;
+    this.attrError.set(null);
+    this.attrNotice.set(null);
+    this.savingAttrs.set(true);
+    this.admin.setAttributes(this.productId()!, this.attrs).subscribe({
+      next: (p) => {
+        this.savingAttrs.set(false);
+        this.product.set(p);
+        this.attrNotice.set('Attributi salvati.');
+      },
+      error: (err: HttpErrorResponse) => {
+        this.savingAttrs.set(false);
+        this.attrError.set(err.error?.message || 'Salvataggio attributi non riuscito.');
+      },
     });
   }
 
