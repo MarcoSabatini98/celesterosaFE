@@ -1,5 +1,8 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpRequest, HttpHandlerFn, HttpResponse } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { provideRouter } from '@angular/router';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { of, lastValueFrom } from 'rxjs';
 import { authInterceptor } from './auth.interceptor';
@@ -35,7 +38,9 @@ describe('authInterceptor', () => {
 
   beforeEach(() => {
     localStorage.clear();
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [provideHttpClient(), provideHttpClientTesting(), provideRouter([])],
+    });
     session = TestBed.inject(SessionService);
   });
 

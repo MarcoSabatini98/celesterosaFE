@@ -71,4 +71,10 @@ export class CartService {
       tap((c) => this.store(c)),
     );
   }
+
+  // Azzera lo stato locale del carrello e il token guest (es. al logout).
+  reset(): void {
+    this.cart.set(EMPTY);
+    this.session.clearCartToken();
+  }
 }

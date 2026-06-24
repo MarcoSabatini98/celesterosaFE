@@ -1,0 +1,60 @@
+<h2 class="sec-title">Marche</h2>
+
+@if (error()) {
+  <p class="error mono">{{ error() }}</p>
+}
+
+<!-- NUOVA MARCA -->
+<form class="new-row" (ngSubmit)="create()">
+  <input name="b_name" [(ngModel)]="newBrand.name" placeholder="Nome marca" required />
+  <input name="b_site" [(ngModel)]="newBrand.website" placeholder="Sito (https://…)" />
+  <button type="submit" class="btn btn--primary" [disabled]="!newBrand.name.trim()">+ Aggiungi</button>
+</form>
+
+@if (loading()) {
+  <div class="rows">
+    @for (s of [1, 2, 3]; track s) {
+      <div class="skeleton-row"></div>
+    }
+  </div>
+} @else {
+  <ul class="rows">
+    @for (b of brands(); track b.id) {
+      <li class="row" [class.inactive]="!b.is_active">
+        <div class="logo" aria-hidden="true">
+          @if (b.logo_url) {
+            <img [src]="b.logo_url" [alt]="b.name" />
+          } @else {
+            <span class="logo-ph">{{ b.name.charAt(0) }}</span>
+          }
+        </div>
+
+        @if (editingId() === b.id) {
+          <div class="edit">
+            <input name="e_name" [(ngModel)]="editForm.name" placeholder="Nome" />
+            <input name="e_site" [(ngModel)]="editForm.website" placeholder="Sito" />
+            <button type="button" class="btn btn--primary" (click)="saveEdit(b)">Salva</button>
+            <button type="button" class="btn btn--ghost" (click)="cancelEdit()">Annulla</button>
+          </div>
+        } @else {
+          <div class="info">
+            <span class="name">{{ b.name }}</span>
+            <span class="slug mono muted">{{ b.slug }} · {{ b.product_count }} prodotti</span>
+          </div>
+
+          <div class="actions">
+            <label class="upload" title="Carica logo">
+              <input type="file" accept="image/*" (change)="onLogo(b, $event)" hidden />
+              Logo
+            </label>
+            <button type="button" class="link" (click)="toggleActive(b)">
+              {{ b.is_active ? 'Disattiva' : 'Attiva' }}
+            </button>
+            <button type="button" class="link" (click)="startEdit(b)">Modifica</button>
+            <button type="button" class="link danger" (click)="remove(b)">Elimina</button>
+          </div>
+        }
+      </li>
+    }
+  </ul>
+}

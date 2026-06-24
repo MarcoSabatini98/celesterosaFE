@@ -1,0 +1,46 @@
+<section class="container section">
+  <p class="eyebrow">Area personale</p>
+  <h1>Il mio account</h1>
+
+  @if (session.user(); as u) {
+    <div class="account-grid">
+      <!-- PROFILO -->
+      <div class="card profile">
+        <div class="avatar" aria-hidden="true">{{ u.first_name.charAt(0) }}{{ u.last_name.charAt(0) }}</div>
+        <div class="who">
+          <span class="name">{{ u.first_name }} {{ u.last_name }}</span>
+          <span class="email mono">{{ u.email }}</span>
+          @if (u.phone) {
+            <span class="phone mono muted">{{ u.phone }}</span>
+          }
+          <span class="role" [class.role--admin]="u.role === 'admin'">
+            {{ u.role === 'admin' ? 'Amministratore' : 'Cliente' }}
+          </span>
+        </div>
+      </div>
+
+      <!-- SCORCIATOIE -->
+      <nav class="card links" aria-label="Scorciatoie">
+        <a routerLink="/ordini" class="link-row">
+          <span>I miei ordini</span>
+          <span class="muted">Storico, dettagli e fatture →</span>
+        </a>
+        @if (session.isAdmin()) {
+          <a routerLink="/admin" class="link-row">
+            <span>Area amministrativa</span>
+            <span class="muted">Catalogo e ordini →</span>
+          </a>
+        }
+        <button type="button" class="link-row logout" (click)="logout()">
+          <span>Esci</span>
+          <span class="muted">Termina la sessione</span>
+        </button>
+      </nav>
+    </div>
+  } @else {
+    <div class="empty">
+      <p class="empty-title">Non sei autenticato</p>
+      <a routerLink="/accedi" class="btn btn--primary">Accedi</a>
+    </div>
+  }
+</section>
