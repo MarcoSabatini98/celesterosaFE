@@ -26,6 +26,11 @@ export class ProductPage implements OnInit {
 
   protected readonly price = computed(() => this.selected()?.price ?? this.product()?.price_from ?? 0);
   protected readonly canBuy = computed(() => (this.selected()?.stock ?? 0) > 0);
+  // Scorta bassa: avviso "ne restano pochi" sotto soglia.
+  protected readonly lowStock = computed(() => {
+    const s = this.selected()?.stock ?? 0;
+    return s > 0 && s <= 5;
+  });
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((p) => {
