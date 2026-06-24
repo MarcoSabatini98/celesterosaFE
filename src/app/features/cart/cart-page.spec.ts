@@ -19,8 +19,11 @@ describe('CartPage', () => {
     expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it('dovrebbe mostrare lo stato vuoto inizialmente', () => {
+  it('dovrebbe mostrare lo stato vuoto a caricamento completato', () => {
     const fixture = TestBed.createComponent(CartPage);
+    fixture.detectChanges();
+    // Simula il completamento del caricamento (oltre lo skeleton iniziale).
+    fixture.componentInstance['loaded'].set(true);
     fixture.detectChanges();
     const text = (fixture.nativeElement as HTMLElement).textContent ?? '';
     expect(text).toContain('Il carrello è vuoto');
