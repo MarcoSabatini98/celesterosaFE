@@ -55,6 +55,9 @@
           <span class="eyebrow">{{ p.brand.name }}</span>
         }
         <h1 class="title">{{ p.name }}</h1>
+        @if (p.condition !== 'new') {
+          <span class="badge badge--cond">{{ p.condition === 'used' ? 'Usato' : 'Ricondizionato' }}</span>
+        }
         @if (p.short_description) {
           <p class="lead">{{ p.short_description }}</p>
         }
@@ -110,7 +113,15 @@
         }
 
         @if (canBuy()) {
-          <p class="stockline"><span class="dot"></span>{{ selected()?.stock }} disponibili · spedizione gratis sopra 99€</p>
+          <p class="stockline" [class.low]="lowStock()">
+            <span class="dot"></span>
+            @if (lowStock()) {
+              Solo {{ selected()?.stock }} rimasti
+            } @else {
+              {{ selected()?.stock }} disponibili
+            }
+            · spedizione gratis sopra 99€
+          </p>
         }
 
         @if (p.attributes.length) {
