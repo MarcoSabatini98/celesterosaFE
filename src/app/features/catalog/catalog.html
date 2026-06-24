@@ -8,7 +8,7 @@
         } @else if (query().featured) {
           Pezzi in evidenza
         } @else if (query().category) {
-          {{ query().category }}
+          {{ categoryName(query().category!) }}
         } @else {
           Tutti gli strumenti
         }
@@ -16,45 +16,150 @@
       <p class="muted mono">{{ total() }} prodotti</p>
     </div>
 
-    <div class="sort" role="group" aria-label="Ordina">
-      @for (s of sorts; track s.value) {
-        <button
-          type="button"
-          class="chip"
-          [class.is-active]="(query().sort || 'newest') === s.value"
-          (click)="changeSort(s.value)"
-        >
-          {{ s.label }}
-        </button>
-      }
+    <div class="head-tools">
+      <button type="button" class="chip filters-toggle" (click)="toggleFilters()">
+        Filtri
+        @if (activeCount()) {
+          <span class="count">{{ activeCount() }}</span>
+        }
+      </button>
+      <div class="sort" role="group" aria-label="Ordina">
+        @for (s of sorts; track s.value) {
+          <button
+            type="button"
+            class="chip"
+            [class.is-active]="(query().sort || 'newest') === s.value"
+            (click)="changeSort(s.value)"
+          >
+            {{ s.label }}
+          </button>
+        }
+      </div>
     </div>
   </header>
 
-  @if (loading() && !products().length) {
-    <div class="product-grid">
-      @for (s of [1, 2, 3, 4, 5, 6, 7, 8]; track s) {
-        <div class="skeleton"></div>
-      }
-    </div>
-  } @else if (!products().length) {
-    <div class="empty">
-      <p class="empty-title">Nessun prodotto trovato</p>
-      <p class="muted">Prova a cambiare reparto o a rimuovere i filtri.</p>
-      <a routerLink="/catalogo" class="btn btn--ghost">Reset filtri</a>
-    </div>
-  } @else {
-    <div class="product-grid">
-      @for (p of products(); track p.id) {
-        <app-product-card [product]="p" />
-      }
-    </div>
-
-    @if (hasMore()) {
-      <div class="more">
-        <button type="button" class="btn btn--ghost btn--lg" (click)="loadMore()" [disabled]="loading()">
-          {{ loading() ? 'Carico…' : 'Carica altri' }}
-        </button>
+  <div class="catalog-layout">
+    <!-- FILTRI -->
+    <aside class="filters" [class.is-open]="filtersOpen()" aria-label="Filtri">
+      <div class="filters-head">
+        <span class="label mono">Filtri</span>
+        @if (activeCount()) {
+          <button type="button" class="link-clear" (click)="clearFilters()">Azzera</button>
+        }
       </div>
-    }
-  }
+
+      <div class="field">
+        <label class="label mono" for="f-cat">Categoria</label>
+        <select
+          id="f-cat"
+          [value]="fCategory()"
+          (change)="fCategory.set($any($event.target).value); applyFilters()"
+        >
+          <option value="">Tutte le categorie</option>
+          @for (top of categories(); track top.id) {
+            <optgroup [label]="top.name">
+              <option [value]="top.slug">Tutto · {{ top.name }}</option>
+              @for (child of top.children; track child.id) {
+                <option [value]="child.slug">{{ child.name }}</option>
+              }
+            </optgroup>
+          }
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="label mono" for="f-brand">Marca</label>
+        <select
+          id="f-brand"
+          [value]="fBrand()"
+          (change)="fBrand.set($any($event.target).value); applyFilters()"
+        >
+          <option value="">Tutte le marche</option>
+          @for (b of brands(); track b.id) {
+            <option [value]="b.slug">{{ b.name }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="field">
+        <label class="label mono" for="f-cond">Condizione</label>
+        <select
+          id="f-cond"
+          [value]="fCondition()"
+          (change)="fCondition.set($any($event.target).value); applyFilters()"
+        >
+          <option value="">Qualsiasi</option>
+          @for (c of conditions; track c.value) {
+            <option [value]="c.value">{{ c.label }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="field">
+        <span class="label mono">Prezzo (€)</span>
+        <div class="price-range">
+          <input
+            type="number"
+            inputmode="numeric"
+            min="0"
+            placeholder="min"
+            aria-label="Prezzo minimo"
+            [value]="fMin()"
+            (input)="fMin.set($any($event.target).value)"
+            (keyup.enter)="applyFilters()"
+          />
+          <span class="dash" aria-hidden="true">–</span>
+          <input
+            type="number"
+            inputmode="numeric"
+            min="0"
+            placeholder="max"
+            aria-label="Prezzo massimo"
+            [value]="fMax()"
+            (input)="fMax.set($any($event.target).value)"
+            (keyup.enter)="applyFilters()"
+          />
+        </div>
+        <button type="button" class="btn btn--ghost apply" (click)="applyFilters()">Applica prezzo</button>
+      </div>
+    </aside>
+
+    <!-- RISULTATI -->
+    <div class="results">
+      @if (loading() && !products().length) {
+        <div class="product-grid">
+          @for (s of [1, 2, 3, 4, 5, 6, 7, 8, 9]; track s) {
+            <div class="skeleton"></div>
+          }
+        </div>
+      } @else if (!products().length) {
+        <div class="empty">
+          <p class="empty-title">Nessun prodotto trovato</p>
+          <p class="muted">Prova a cambiare reparto o a rimuovere i filtri.</p>
+          @if (activeCount()) {
+            <button type="button" class="btn btn--ghost" (click)="clearFilters()">Azzera filtri</button>
+          }
+        </div>
+      } @else {
+        <div class="product-grid">
+          @for (p of products(); track p.id) {
+            <app-product-card [product]="p" />
+          }
+        </div>
+
+        @if (hasMore()) {
+          <div class="more">
+            <button
+              type="button"
+              class="btn btn--ghost btn--lg"
+              (click)="loadMore()"
+              [disabled]="loading()"
+            >
+              {{ loading() ? 'Carico…' : 'Carica altri' }}
+            </button>
+          </div>
+        }
+      }
+    </div>
+  </div>
 </section>
