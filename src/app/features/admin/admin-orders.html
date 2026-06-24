@@ -1,0 +1,39 @@
+@if (loading()) {
+  <div class="ph"></div>
+} @else if (items().length === 0) {
+  <p class="muted empty">Nessun ordine ricevuto.</p>
+} @else {
+  <div class="table" role="table">
+    <div class="thead mono" role="row">
+      <span>Ordine</span>
+      <span>Data</span>
+      <span>Cliente</span>
+      <span>Totale</span>
+      <span>Stato</span>
+    </div>
+    @for (o of items(); track o.id) {
+      <div class="trow" role="row">
+        <span class="num mono">{{ o.order_number }}</span>
+        <span class="muted">{{ o.placed_at ? (o.placed_at | date: 'd MMM y') : '' }}</span>
+        <span class="muted">{{ o.email }}</span>
+        <span class="mono total">{{ o.grand_total | euro }}</span>
+        <span class="status-cell">
+          <span class="badge" [style.color]="statusMap[o.status].color" [style.borderColor]="statusMap[o.status].color">
+            {{ statusMap[o.status].label }}
+          </span>
+          <select
+            class="status-select"
+            [value]="''"
+            (change)="changeStatus(o, $any($event.target).value); $any($event.target).value = ''"
+            aria-label="Cambia stato"
+          >
+            <option value="" disabled selected>Aggiorna…</option>
+            @for (s of options; track s) {
+              <option [value]="s">{{ statusMap[s].label }}</option>
+            }
+          </select>
+        </span>
+      </div>
+    }
+  </div>
+}

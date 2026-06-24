@@ -1,0 +1,19 @@
+{
+  "detector": {
+    "ignoreRules": [
+      "broken-image"
+    ],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "broken-image",
+        "value": "*",
+        "files": [
+          "src/app/**/*.html"
+        ],
+        "reason": "Angular [src] runtime binding, protetto da @if",
+        "createdAt": "2026-06-24T07:25:04.490Z"
+      }
+    ]
+  }
+}

@@ -1,0 +1,37 @@
+<section class="container section">
+  <p class="eyebrow">Area cliente</p>
+  <h1>I miei ordini</h1>
+
+  @if (loading()) {
+    <div class="rows">
+      @for (s of [1, 2, 3]; track s) {
+        <div class="skeleton"></div>
+      }
+    </div>
+  } @else if (items().length === 0) {
+    <div class="empty">
+      <p class="empty-title">Nessun ordine</p>
+      <p class="muted">Quando acquisti, i tuoi ordini compaiono qui.</p>
+      <a routerLink="/catalogo" class="btn btn--primary">Vai al catalogo</a>
+    </div>
+  } @else {
+    <ul class="rows">
+      @for (o of items(); track o.id) {
+        <li>
+          <a class="order-row" [routerLink]="['/ordini', o.order_number]">
+            <div class="cell">
+              <span class="num mono">{{ o.order_number }}</span>
+              <span class="date muted">{{ o.placed_at ? (o.placed_at | date: 'd MMM y') : '' }}</span>
+            </div>
+            <span class="badge" [style.color]="statusMap[o.status].color" [style.borderColor]="statusMap[o.status].color">
+              {{ statusMap[o.status].label }}
+            </span>
+            <span class="count muted">{{ o.items.length }} articoli</span>
+            <span class="total mono">{{ o.grand_total | euro }}</span>
+            <span class="arrow">→</span>
+          </a>
+        </li>
+      }
+    </ul>
+  }
+</section>

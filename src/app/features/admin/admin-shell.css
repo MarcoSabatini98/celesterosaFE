@@ -1,0 +1,40 @@
+.section {
+  margin-top: var(--space-l);
+}
+.admin-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-m);
+  flex-wrap: wrap;
+}
+.admin-head h1 {
+  font-size: var(--step-4);
+  margin-top: 0.2rem;
+}
+.who {
+  font-size: var(--step--1);
+  color: var(--text-faint);
+}
+
+.admin-tabs {
+  display: flex;
+  gap: 0.4rem;
+  margin: var(--space-l) 0;
+  border-bottom: 1px solid var(--border);
+}
+.admin-tabs a {
+  padding: 0.7rem 1rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+.admin-tabs a:hover {
+  color: var(--text);
+}
+.admin-tabs a.is-active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+}

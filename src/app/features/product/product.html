@@ -1,0 +1,144 @@
+@if (loading()) {
+  <section class="container section">
+    <div class="ph-grid">
+      <div class="ph ph-img"></div>
+      <div class="ph-info">
+        <div class="ph ph-line w40"></div>
+        <div class="ph ph-line w80"></div>
+        <div class="ph ph-line w60"></div>
+      </div>
+    </div>
+  </section>
+} @else if (product(); as p) {
+  <section class="container section">
+    <nav class="crumbs mono">
+      <a routerLink="/">Home</a> <span>/</span>
+      <a routerLink="/catalogo">Catalogo</a>
+      @if (p.category) {
+        <span>/</span>
+        <a routerLink="/catalogo" [queryParams]="{ category: p.category.slug }">{{ p.category.name }}</a>
+      }
+    </nav>
+
+    <div class="layout">
+      <!-- GALLERIA -->
+      <div class="gallery">
+        <div class="stage">
+          @if (activeImage()) {
+            <img [src]="activeImage()!" [alt]="p.name" />
+          } @else {
+            <div class="stage-fallback" aria-hidden="true">
+              <svg viewBox="0 0 120 120" width="110" height="110" fill="none">
+                <rect x="14" y="50" width="10" height="20" rx="5" fill="var(--accent)" opacity="0.5" />
+                <rect x="34" y="34" width="10" height="52" rx="5" fill="var(--accent)" opacity="0.75" />
+                <rect x="55" y="16" width="10" height="88" rx="5" fill="var(--accent-2)" />
+                <rect x="76" y="36" width="10" height="48" rx="5" fill="var(--accent-2)" opacity="0.7" />
+                <rect x="96" y="52" width="10" height="16" rx="5" fill="var(--accent-2)" opacity="0.5" />
+              </svg>
+            </div>
+          }
+        </div>
+        @if (p.images.length > 1) {
+          <div class="thumbs">
+            @for (img of p.images; track img.id) {
+              <button type="button" class="thumb" [class.is-active]="activeImage() === img.url" (click)="activeImage.set(img.url)">
+                <img [src]="img.url" [alt]="img.alt || p.name" />
+              </button>
+            }
+          </div>
+        }
+      </div>
+
+      <!-- INFO / ACQUISTO -->
+      <div class="info">
+        @if (p.brand) {
+          <span class="eyebrow">{{ p.brand.name }}</span>
+        }
+        <h1 class="title">{{ p.name }}</h1>
+        @if (p.short_description) {
+          <p class="lead">{{ p.short_description }}</p>
+        }
+
+        <div class="price-row">
+          <span class="price mono">{{ price() | euro }}</span>
+          <span class="vat mono">IVA inclusa</span>
+        </div>
+
+        @if (p.variants.length > 1) {
+          <div class="variants">
+            <span class="label mono">Variante</span>
+            <div class="variant-list">
+              @for (v of p.variants; track v.id) {
+                <button
+                  type="button"
+                  class="variant"
+                  [class.is-active]="selected()?.id === v.id"
+                  [disabled]="!v.in_stock"
+                  (click)="selectVariant(v)"
+                >
+                  {{ v.name }}
+                  @if (!v.in_stock) {
+                    <span class="vx">esaurito</span>
+                  }
+                </button>
+              }
+            </div>
+          </div>
+        }
+
+        <div class="buy">
+          <div class="qty" role="group" aria-label="Quantità">
+            <button type="button" (click)="setQty(-1)" [disabled]="qty() <= 1" aria-label="Diminuisci">−</button>
+            <span class="mono">{{ qty() }}</span>
+            <button type="button" (click)="setQty(1)" [disabled]="qty() >= (selected()?.stock || 1)" aria-label="Aumenta">+</button>
+          </div>
+          <button type="button" class="btn btn--primary btn--lg buy-btn" [disabled]="!canBuy() || adding()" (click)="addToCart()">
+            @if (added()) {
+              ✓ Aggiunto
+            } @else if (adding()) {
+              Aggiungo…
+            } @else if (canBuy()) {
+              Aggiungi al carrello
+            } @else {
+              Non disponibile
+            }
+          </button>
+        </div>
+
+        @if (added()) {
+          <a routerLink="/carrello" class="link-arrow">Vai al carrello →</a>
+        }
+
+        @if (canBuy()) {
+          <p class="stockline"><span class="dot"></span>{{ selected()?.stock }} disponibili · spedizione gratis sopra 99€</p>
+        }
+
+        @if (p.attributes.length) {
+          <div class="specs">
+            <span class="label mono">Scheda tecnica</span>
+            <dl>
+              @for (a of p.attributes; track a.code) {
+                <div class="spec-row">
+                  <dt>{{ a.label }}</dt>
+                  <dd class="mono">{{ a.value }}{{ a.unit ? ' ' + a.unit : '' }}</dd>
+                </div>
+              }
+            </dl>
+          </div>
+        }
+      </div>
+    </div>
+
+    @if (p.description) {
+      <div class="description">
+        <h2>Descrizione</h2>
+        <p>{{ p.description }}</p>
+      </div>
+    }
+  </section>
+} @else {
+  <section class="container section empty">
+    <p class="empty-title">Prodotto non trovato</p>
+    <a routerLink="/catalogo" class="btn btn--ghost">Torna al catalogo</a>
+  </section>
+}

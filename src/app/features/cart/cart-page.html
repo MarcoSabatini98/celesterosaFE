@@ -1,0 +1,61 @@
+<section class="container section">
+  <p class="eyebrow">Carrello</p>
+  <h1>Il tuo carrello</h1>
+
+  @if (model().items.length === 0) {
+    <div class="empty">
+      <p class="empty-title">Il carrello è vuoto</p>
+      <p class="muted">Aggiungi strumenti dal catalogo per iniziare.</p>
+      <a routerLink="/catalogo" class="btn btn--primary">Vai al catalogo</a>
+    </div>
+  } @else {
+    <div class="cart-layout">
+      <ul class="items">
+        @for (item of model().items; track item.item_id) {
+          <li class="item">
+            <div class="item-thumb" aria-hidden="true">
+              @if (item.image) {
+                <img [src]="item.image" [alt]="item.product_name" />
+              } @else {
+                <svg viewBox="0 0 48 48" width="34" height="34" fill="none">
+                  <rect x="10" y="20" width="5" height="8" rx="2.5" fill="var(--accent)" opacity="0.6" />
+                  <rect x="21" y="12" width="5" height="24" rx="2.5" fill="var(--accent-2)" />
+                  <rect x="32" y="22" width="5" height="6" rx="2.5" fill="var(--accent-2)" opacity="0.6" />
+                </svg>
+              }
+            </div>
+            <div class="item-info">
+              <a class="item-name" [routerLink]="['/prodotto', item.product_slug]">{{ item.product_name }}</a>
+              <span class="item-variant mono">{{ item.variant_name }}</span>
+              <span class="item-unit muted">{{ item.unit_price | euro }} cad.</span>
+            </div>
+            <div class="qty" role="group" aria-label="Quantità">
+              <button type="button" (click)="dec(item)" [disabled]="item.quantity <= 1" aria-label="Diminuisci">−</button>
+              <span class="mono">{{ item.quantity }}</span>
+              <button type="button" (click)="inc(item)" [disabled]="item.quantity >= item.stock" aria-label="Aumenta">+</button>
+            </div>
+            <span class="item-total mono">{{ item.line_total | euro }}</span>
+            <button type="button" class="remove" (click)="remove(item)" aria-label="Rimuovi">
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7">
+                <path d="M5 7h14M10 7V5h4v2M8 7l1 12h6l1-12" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+          </li>
+        }
+      </ul>
+
+      <aside class="summary">
+        <h2>Riepilogo</h2>
+        <div class="srow"><span>Imponibile</span><span class="mono">{{ model().subtotal | euro }}</span></div>
+        <div class="srow"><span>IVA</span><span class="mono">{{ model().vat_total | euro }}</span></div>
+        <div class="srow">
+          <span>Spedizione</span>
+          <span class="mono">{{ model().shipping_total === 0 ? 'Gratis' : (model().shipping_total | euro) }}</span>
+        </div>
+        <div class="srow total"><span>Totale</span><span class="mono">{{ model().grand_total | euro }}</span></div>
+        <a routerLink="/checkout" class="btn btn--primary btn--lg checkout">Procedi al checkout</a>
+        <a routerLink="/catalogo" class="continue">Continua lo shopping</a>
+      </aside>
+    </div>
+  }
+</section>

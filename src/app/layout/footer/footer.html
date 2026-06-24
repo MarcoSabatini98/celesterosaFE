@@ -1,0 +1,26 @@
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-brand">
+      <span class="brand-text">celeste<span class="brand-accent">rosa</span></span>
+      <p class="muted">Strumenti musicali selezionati. Spedizione in tutta Italia.</p>
+    </div>
+    <nav class="footer-col" aria-label="Catalogo">
+      <h4>Catalogo</h4>
+      <a routerLink="/catalogo" [queryParams]="{ category: 'chitarre-e-bassi' }">Chitarre &amp; Bassi</a>
+      <a routerLink="/catalogo" [queryParams]="{ category: 'tastiere-e-piano' }">Tastiere &amp; Piano</a>
+      <a routerLink="/catalogo" [queryParams]="{ category: 'studio-e-audio-pro' }">Studio &amp; Audio Pro</a>
+      <a routerLink="/catalogo">Tutto il catalogo</a>
+    </nav>
+    <nav class="footer-col" aria-label="Assistenza">
+      <h4>Assistenza</h4>
+      <a routerLink="/accedi">Area cliente</a>
+      <a routerLink="/ordini">I miei ordini</a>
+      <a routerLink="/carrello">Carrello</a>
+      <a href="http://localhost:3000/api-docs" target="_blank" rel="noopener">API / Docs</a>
+    </nav>
+  </div>
+  <div class="container footer-bottom">
+    <span class="mono muted">© {{ year }} celesterosa</span>
+    <span class="mono muted">Pagamenti sicuri · Sandbox</span>
+  </div>
+</footer>

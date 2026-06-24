@@ -1,13 +1,40 @@
 <!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>CelesterosaFE</title>
-  <base href="/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-</head>
-<body>
-  <app-root></app-root>
-</body>
+<html lang="it" data-theme="dark">
+  <head>
+    <meta charset="utf-8" />
+    <title>celesterosa — Strumenti musicali</title>
+    <meta
+      name="description"
+      content="celesterosa — strumenti musicali selezionati. Chitarre, tastiere, fiati, batterie, audio pro e accessori."
+    />
+    <base href="/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b0d12" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+
+    <!-- Imposta il tema prima del paint per evitare il flash (FOUC) -->
+    <script>
+      (function () {
+        try {
+          var t = localStorage.getItem('celesterosa-theme');
+          if (!t) {
+            t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+          }
+          document.documentElement.setAttribute('data-theme', t);
+          var meta = document.querySelector('meta[name=theme-color]');
+          if (meta) meta.setAttribute('content', t === 'light' ? '#f5f6f8' : '#0b0d12');
+        } catch (e) {}
+      })();
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <app-root></app-root>
+  </body>
 </html>

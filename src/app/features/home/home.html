@@ -1,0 +1,113 @@
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="container hero-inner">
+    <p class="eyebrow">Strumenti musicali · selezione curata</p>
+    <h1 class="hero-title">
+      Il tuo suono,<br />
+      costruito su <span class="grad">misura</span>.
+    </h1>
+    <p class="hero-lead">
+      Chitarre, tastiere, fiati, batterie e audio professionale. Marchi scelti, schede tecniche
+      dettagliate, spedizione in tutta Italia.
+    </p>
+    <div class="hero-cta">
+      <a routerLink="/catalogo" class="btn btn--primary btn--lg">Esplora il catalogo</a>
+      <a routerLink="/catalogo" [queryParams]="{ featured: true }" class="btn btn--ghost btn--lg">
+        Pezzi in evidenza
+      </a>
+    </div>
+    <dl class="hero-stats">
+      <div>
+        <dt class="mono">Categorie</dt>
+        <dd>11+</dd>
+      </div>
+      <div>
+        <dt class="mono">Marchi</dt>
+        <dd>16</dd>
+      </div>
+      <div>
+        <dt class="mono">Spedizione</dt>
+        <dd>Gratis &gt; 99€</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<!-- CATEGORIE -->
+@if (categories().length) {
+  <section class="container section">
+    <header class="section-head">
+      <h2>Reparti</h2>
+      <a routerLink="/catalogo" class="link-arrow">Tutto il catalogo →</a>
+    </header>
+    <div class="cat-grid">
+      @for (cat of categories(); track cat.id) {
+        <a class="cat-tile" routerLink="/catalogo" [queryParams]="{ category: cat.slug }">
+          <span class="cat-name">{{ cat.name }}</span>
+          @if (cat.children.length) {
+            <span class="cat-count mono">{{ cat.children.length }} linee</span>
+          }
+          <span class="cat-arrow">→</span>
+        </a>
+      }
+    </div>
+  </section>
+}
+
+<!-- IN EVIDENZA -->
+@if (featured().length) {
+  <section class="container section">
+    <header class="section-head">
+      <h2>In evidenza</h2>
+      <a routerLink="/catalogo" [queryParams]="{ featured: true }" class="link-arrow">Vedi tutti →</a>
+    </header>
+    <div class="product-grid">
+      @for (p of featured(); track p.id) {
+        <app-product-card [product]="p" />
+      }
+    </div>
+  </section>
+}
+
+<!-- SPEC BAND (no card, riga tecnica) -->
+<section class="container">
+  <div class="spec-band">
+    <div class="spec">
+      <span class="spec-k mono">01 / Pagamenti</span>
+      <span class="spec-v">Stripe sicuro, checkout rapido anche come ospite</span>
+    </div>
+    <div class="spec">
+      <span class="spec-k mono">02 / Fatturazione</span>
+      <span class="spec-v">Fattura PDF con IVA generata in automatico</span>
+    </div>
+    <div class="spec">
+      <span class="spec-k mono">03 / Spedizione</span>
+      <span class="spec-v">Tracciata in tutta Italia, gratis sopra 99€</span>
+    </div>
+  </div>
+</section>
+
+<!-- NOVITÀ -->
+@if (newest().length) {
+  <section class="container section">
+    <header class="section-head">
+      <h2>Appena arrivati</h2>
+      <a routerLink="/catalogo" [queryParams]="{ sort: 'newest' }" class="link-arrow">Novità →</a>
+    </header>
+    <div class="product-grid">
+      @for (p of newest(); track p.id) {
+        <app-product-card [product]="p" />
+      }
+    </div>
+  </section>
+}
+
+<!-- CTA FINALE -->
+<section class="container section">
+  <div class="cta">
+    <h2 class="cta-title">Non sai da dove iniziare?</h2>
+    <p class="cta-lead">Sfoglia per reparto o filtra per marca, prezzo e condizione.</p>
+    <a routerLink="/catalogo" class="btn btn--primary btn--lg">Apri il catalogo</a>
+  </div>
+</section>

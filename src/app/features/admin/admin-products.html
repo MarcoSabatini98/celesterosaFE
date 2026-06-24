@@ -1,0 +1,36 @@
+<div class="bar">
+  <p class="muted mono">{{ items().length }} prodotti</p>
+  <a routerLink="/admin/prodotti/nuovo" class="btn btn--primary">+ Nuovo prodotto</a>
+</div>
+
+@if (loading()) {
+  <div class="ph"></div>
+} @else if (items().length === 0) {
+  <p class="muted empty">Nessun prodotto. Creane uno nuovo.</p>
+} @else {
+  <div class="table">
+    <div class="thead mono">
+      <span>Nome</span>
+      <span>SKU</span>
+      <span>Categoria</span>
+      <span>Prezzo</span>
+      <span></span>
+    </div>
+    @for (p of items(); track p.id) {
+      <div class="trow">
+        <span class="name">{{ p.name }}</span>
+        <span class="mono muted">{{ p.sku }}</span>
+        <span class="muted">{{ p.category?.name }}</span>
+        <span class="mono">{{ p.base_price | euro }}</span>
+        <span class="actions">
+          <a [routerLink]="['/admin/prodotti', p.id]" class="btn btn--ghost btn-sm">Modifica</a>
+          <button type="button" class="btn-danger" (click)="remove(p)" aria-label="Elimina">
+            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.7">
+              <path d="M5 7h14M10 7V5h4v2M8 7l1 12h6l1-12" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+          </button>
+        </span>
+      </div>
+    }
+  </div>
+}

@@ -1,0 +1,76 @@
+<section class="container section">
+  <a routerLink="/ordini" class="back mono">← I miei ordini</a>
+
+  @if (loading()) {
+    <div class="ph"></div>
+  } @else if (order(); as o) {
+    <header class="order-head">
+      <div>
+        <p class="eyebrow">Ordine</p>
+        <h1 class="mono">{{ o.order_number }}</h1>
+        <p class="muted">{{ o.placed_at ? (o.placed_at | date: 'd MMMM y, HH:mm') : '' }}</p>
+      </div>
+      <span class="badge" [style.color]="statusMap[o.status].color" [style.borderColor]="statusMap[o.status].color">
+        {{ statusMap[o.status].label }}
+      </span>
+    </header>
+
+    <div class="grid">
+      <div class="main">
+        <ul class="items">
+          @for (it of o.items; track it.id) {
+            <li class="item">
+              <div class="it-info">
+                <span class="it-name">{{ it.product_name }}</span>
+                @if (it.variant_name) {
+                  <span class="it-variant mono">{{ it.variant_name }}</span>
+                }
+                <span class="it-sku mono muted">{{ it.sku }}</span>
+              </div>
+              <span class="it-qty mono">× {{ it.quantity }}</span>
+              <span class="it-total mono">{{ it.line_total | euro }}</span>
+            </li>
+          }
+        </ul>
+      </div>
+
+      <aside class="side">
+        <div class="card">
+          <h2>Totali</h2>
+          <div class="srow"><span>Imponibile</span><span class="mono">{{ o.subtotal | euro }}</span></div>
+          <div class="srow"><span>IVA</span><span class="mono">{{ o.vat_total | euro }}</span></div>
+          <div class="srow"><span>Spedizione</span><span class="mono">{{ o.shipping_total === 0 ? 'Gratis' : (o.shipping_total | euro) }}</span></div>
+          <div class="srow total"><span>Totale</span><span class="mono">{{ o.grand_total | euro }}</span></div>
+        </div>
+
+        <div class="card">
+          <h2>Spedizione</h2>
+          <address class="addr">
+            {{ o.shipping.recipient }}<br />
+            {{ o.shipping.line1 }}<br />
+            {{ o.shipping.postal_code }} {{ o.shipping.city }} {{ o.shipping.province }}
+          </address>
+        </div>
+
+        @if (o.invoice) {
+          <div class="card">
+            <h2>Fattura</h2>
+            <p class="muted mono">{{ o.invoice.number }}</p>
+            @if (o.invoice.pdf_url) {
+              <a [href]="o.invoice.pdf_url" target="_blank" rel="noopener" class="btn btn--ghost full">
+                Scarica PDF
+              </a>
+            } @else {
+              <p class="muted">In preparazione…</p>
+            }
+          </div>
+        }
+      </aside>
+    </div>
+  } @else {
+    <div class="empty">
+      <p class="empty-title">Ordine non trovato</p>
+      <a routerLink="/ordini" class="btn btn--ghost">Torna agli ordini</a>
+    </div>
+  }
+</section>

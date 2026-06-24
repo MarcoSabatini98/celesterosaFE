@@ -1,0 +1,49 @@
+<section class="container auth">
+  <div class="auth-card">
+    <p class="eyebrow">{{ mode() === 'login' ? 'Bentornato' : 'Crea account' }}</p>
+    <h1>{{ mode() === 'login' ? 'Accedi' : 'Registrati' }}</h1>
+
+    <div class="tabs" role="tablist">
+      <button type="button" role="tab" [class.is-active]="mode() === 'login'" (click)="switchMode('login')">Accedi</button>
+      <button type="button" role="tab" [class.is-active]="mode() === 'register'" (click)="switchMode('register')">Registrati</button>
+    </div>
+
+    <form (ngSubmit)="submit()" #f="ngForm">
+      @if (mode() === 'register') {
+        <div class="grid2">
+          <label class="field">
+            <span>Nome</span>
+            <input name="first_name" [(ngModel)]="first_name" required autocomplete="given-name" />
+          </label>
+          <label class="field">
+            <span>Cognome</span>
+            <input name="last_name" [(ngModel)]="last_name" required autocomplete="family-name" />
+          </label>
+        </div>
+      }
+
+      <label class="field">
+        <span>Email</span>
+        <input name="email" type="email" [(ngModel)]="email" required autocomplete="email" placeholder="nome@esempio.it" />
+      </label>
+
+      <label class="field">
+        <span>Password</span>
+        <input name="password" type="password" [(ngModel)]="password" required minlength="8" autocomplete="current-password" placeholder="Almeno 8 caratteri" />
+      </label>
+
+      @if (error()) {
+        <p class="error mono">{{ error() }}</p>
+      }
+
+      <button type="submit" class="btn btn--primary btn--lg full" [disabled]="loading() || f.invalid">
+        {{ loading() ? 'Attendi…' : mode() === 'login' ? 'Accedi' : 'Crea account' }}
+      </button>
+    </form>
+
+    <p class="hint">
+      Puoi anche acquistare come ospite.
+      <a routerLink="/catalogo">Torna al catalogo</a>
+    </p>
+  </div>
+</section>

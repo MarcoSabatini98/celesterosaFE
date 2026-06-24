@@ -1,0 +1,130 @@
+<section class="container section">
+  @if (state() === 'done' && order(); as ord) {
+    <!-- CONFERMA -->
+    <div class="done">
+      <div class="done-mark" aria-hidden="true">
+        <svg viewBox="0 0 48 48" width="48" height="48" fill="none" stroke="currentColor" stroke-width="2.4">
+          <circle cx="24" cy="24" r="21" opacity="0.25" />
+          <path d="M15 24.5l6 6 12-13" stroke-linecap="round" stroke-linejoin="round" />
+        </svg>
+      </div>
+      <h1>Ordine confermato</h1>
+      <p class="lead">Grazie! Abbiamo ricevuto il pagamento dell'ordine <strong class="mono">{{ ord.order_number }}</strong>.</p>
+      <p class="muted">Una email di conferma con la fattura è in arrivo a {{ ord.email }}.</p>
+      <div class="done-actions">
+        <a [routerLink]="['/ordini', ord.order_number]" class="btn btn--primary btn--lg">Vedi l'ordine</a>
+        <a routerLink="/catalogo" class="btn btn--ghost btn--lg">Continua lo shopping</a>
+      </div>
+    </div>
+  } @else if (model().items.length === 0) {
+    <div class="empty">
+      <p class="empty-title">Il carrello è vuoto</p>
+      <a routerLink="/catalogo" class="btn btn--primary">Vai al catalogo</a>
+    </div>
+  } @else {
+    <p class="eyebrow">Checkout</p>
+    <h1>Spedizione e pagamento</h1>
+
+    <form class="checkout-layout" (ngSubmit)="submit()" #f="ngForm">
+      <div class="form-col">
+        @if (!session.isAuthenticated()) {
+          <fieldset class="block">
+            <legend>Contatto</legend>
+            <label class="field">
+              <span>Email</span>
+              <input name="email" type="email" [(ngModel)]="email" required autocomplete="email" placeholder="nome@esempio.it" />
+            </label>
+            <p class="hint">Hai un account? <a routerLink="/accedi" [queryParams]="{ redirect: '/checkout' }">Accedi</a> per ritrovare i tuoi ordini.</p>
+          </fieldset>
+        }
+
+        <fieldset class="block">
+          <legend>Indirizzo di spedizione</legend>
+          <label class="field">
+            <span>Destinatario</span>
+            <input name="recipient" [(ngModel)]="shipping.recipient" required autocomplete="name" />
+          </label>
+          <label class="field">
+            <span>Indirizzo</span>
+            <input name="line1" [(ngModel)]="shipping.line1" required autocomplete="address-line1" />
+          </label>
+          <label class="field">
+            <span>Indirizzo (riga 2)</span>
+            <input name="line2" [(ngModel)]="shipping.line2" autocomplete="address-line2" />
+          </label>
+          <div class="row3">
+            <label class="field">
+              <span>CAP</span>
+              <input name="postal_code" [(ngModel)]="shipping.postal_code" required autocomplete="postal-code" />
+            </label>
+            <label class="field">
+              <span>Città</span>
+              <input name="city" [(ngModel)]="shipping.city" required autocomplete="address-level2" />
+            </label>
+            <label class="field">
+              <span>Prov.</span>
+              <input name="province" [(ngModel)]="shipping.province" maxlength="4" autocomplete="address-level1" />
+            </label>
+          </div>
+          <label class="field">
+            <span>Telefono</span>
+            <input name="phone" [(ngModel)]="shipping.phone" autocomplete="tel" />
+          </label>
+        </fieldset>
+
+        <fieldset class="block">
+          <legend>Fatturazione</legend>
+          <label class="check">
+            <input type="checkbox" name="sameBilling" [(ngModel)]="sameBilling" />
+            <span>Uguale all'indirizzo di spedizione</span>
+          </label>
+          @if (!sameBilling) {
+            <label class="field">
+              <span>Destinatario</span>
+              <input name="b_recipient" [(ngModel)]="billing.recipient" required />
+            </label>
+            <label class="field">
+              <span>Indirizzo</span>
+              <input name="b_line1" [(ngModel)]="billing.line1" required />
+            </label>
+            <div class="row3">
+              <label class="field"><span>CAP</span><input name="b_postal" [(ngModel)]="billing.postal_code" required /></label>
+              <label class="field"><span>Città</span><input name="b_city" [(ngModel)]="billing.city" required /></label>
+              <label class="field"><span>Prov.</span><input name="b_prov" [(ngModel)]="billing.province" maxlength="4" /></label>
+            </div>
+          }
+          <label class="field">
+            <span>Partita IVA (opzionale)</span>
+            <input name="billingVat" [(ngModel)]="billingVat" placeholder="IT01234567890" />
+          </label>
+        </fieldset>
+
+        @if (error()) {
+          <p class="error mono">{{ error() }}</p>
+        }
+      </div>
+
+      <!-- RIEPILOGO -->
+      <aside class="summary">
+        <h2>Riepilogo</h2>
+        <ul class="mini-items">
+          @for (item of model().items; track item.item_id) {
+            <li>
+              <span class="mi-name">{{ item.product_name }} <span class="mono">× {{ item.quantity }}</span></span>
+              <span class="mono">{{ item.line_total | euro }}</span>
+            </li>
+          }
+        </ul>
+        <div class="srow"><span>Imponibile</span><span class="mono">{{ model().subtotal | euro }}</span></div>
+        <div class="srow"><span>IVA</span><span class="mono">{{ model().vat_total | euro }}</span></div>
+        <div class="srow"><span>Spedizione</span><span class="mono">{{ model().shipping_total === 0 ? 'Gratis' : (model().shipping_total | euro) }}</span></div>
+        <div class="srow total"><span>Totale</span><span class="mono">{{ model().grand_total | euro }}</span></div>
+
+        <button type="submit" class="btn btn--primary btn--lg full" [disabled]="state() === 'processing' || f.invalid">
+          {{ state() === 'processing' ? 'Elaboro il pagamento…' : 'Paga ' + (model().grand_total | euro) }}
+        </button>
+        <p class="secure mono"><span class="dot"></span>Pagamento sandbox sicuro · simulato</p>
+      </aside>
+    </form>
+  }
+</section>
