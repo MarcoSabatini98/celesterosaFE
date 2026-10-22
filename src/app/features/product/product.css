@@ -213,6 +213,7 @@
 .link-arrow {
   display: inline-block;
   margin-top: var(--space-s);
+  margin-right: 40px;
   color: var(--accent);
   font-weight: 600;
 }

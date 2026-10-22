@@ -3,7 +3,8 @@
     <p class="eyebrow">{{ mode() === 'login' ? 'Bentornato' : 'Crea account' }}</p>
     <h1>{{ mode() === 'login' ? 'Accedi' : 'Registrati' }}</h1>
 
-    <div class="tabs" role="tablist">
+    <div class="tabs" [class.reg]="mode() === 'register'" role="tablist">
+      <span class="tab-indicator" aria-hidden="true"></span>
       <button type="button" role="tab" [class.is-active]="mode() === 'login'" (click)="switchMode('login')">Accedi</button>
       <button type="button" role="tab" [class.is-active]="mode() === 'register'" (click)="switchMode('register')">Registrati</button>
     </div>
