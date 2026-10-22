@@ -1,6 +1,7 @@
 // Configurazione runtime del frontend.
+// API sullo stesso dominio: in sviluppo il proxy di ng serve (proxy.conf.json),
+// in produzione vercel.json, inoltrano /api e /api-docs al backend.
 export const environment = {
   production: false,
-  apiBase: 'http://localhost:3000/api/v1',
-  mediaBase: 'http://localhost:9000', // MinIO (URL già assoluti dal backend)
+  apiBase: '/api/v1',
 };
