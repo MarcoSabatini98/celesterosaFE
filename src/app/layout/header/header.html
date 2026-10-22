@@ -24,6 +24,15 @@
     </nav>
 
     <div class="header-actions">
+      @if (session.user(); as u) {
+        <a
+          routerLink="/account"
+          routerLinkActive="is-active"
+          class="user-name"
+          [class.is-admin]="session.isAdmin()"
+          >{{ u.first_name }}</a
+        >
+      }
       <button
         type="button"
         class="icon-btn"
@@ -42,14 +51,14 @@
         }
       </button>
 
-      <a [routerLink]="session.isAuthenticated() ? '/account' : '/accedi'" class="icon-btn" aria-label="Area cliente">
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7">
-          <circle cx="12" cy="8" r="3.6" />
-          <path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6" stroke-linecap="round" />
-        </svg>
-      </a>
-
-      @if (session.isAuthenticated()) {
+      @if (!session.isAuthenticated()) {
+        <a routerLink="/accedi" class="icon-btn" aria-label="Accedi o registrati">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7">
+            <circle cx="12" cy="8" r="3.6" />
+            <path d="M5 20c0-3.6 3.1-6 7-6s7 2.4 7 6" stroke-linecap="round" />
+          </svg>
+        </a>
+      } @else {
         <button type="button" class="icon-btn" (click)="logout()" aria-label="Esci">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.7">
             <path d="M15 4h2.5A1.5 1.5 0 0 1 19 5.5v13a1.5 1.5 0 0 1-1.5 1.5H15" stroke-linecap="round" stroke-linejoin="round" />
