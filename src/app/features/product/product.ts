@@ -1,7 +1,7 @@
 import { Component, OnInit, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { CatalogService } from '../../core/services/catalog.service';
-import { CartService } from '../../core/services/cart.service';
+import { CatalogService } from '../../core/services/catalog-service/catalog.service';
+import { CartService } from '../../core/services/cart-service/cart.service';
 import { ProductDetail, ProductVariant } from '../../core/models/catalog.models';
 import { EuroPipe } from '../../shared/pipes/euro.pipe';
 
@@ -26,6 +26,11 @@ export class ProductPage implements OnInit {
 
   protected readonly price = computed(() => this.selected()?.price ?? this.product()?.price_from ?? 0);
   protected readonly canBuy = computed(() => (this.selected()?.stock ?? 0) > 0);
+  // Scorta bassa: avviso "ne restano pochi" sotto soglia.
+  protected readonly lowStock = computed(() => {
+    const s = this.selected()?.stock ?? 0;
+    return s > 0 && s <= 5;
+  });
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((p) => {

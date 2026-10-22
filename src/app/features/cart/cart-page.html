@@ -2,7 +2,13 @@
   <p class="eyebrow">Carrello</p>
   <h1>Il tuo carrello</h1>
 
-  @if (model().items.length === 0) {
+  @if (!loaded()) {
+    <div class="cart-loading">
+      @for (s of [1, 2, 3]; track s) {
+        <div class="skeleton-row"></div>
+      }
+    </div>
+  } @else if (model().items.length === 0) {
     <div class="empty">
       <p class="empty-title">Il carrello è vuoto</p>
       <p class="muted">Aggiungi strumenti dal catalogo per iniziare.</p>

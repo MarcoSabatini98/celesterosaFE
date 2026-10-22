@@ -21,10 +21,118 @@
   margin-top: 0.4rem;
 }
 
+.head-tools {
+  display: flex;
+  align-items: center;
+  gap: var(--space-s);
+  flex-wrap: wrap;
+}
 .sort {
   display: flex;
   gap: 0.4rem;
   flex-wrap: wrap;
+}
+
+/* Toggle filtri: visibile solo su mobile */
+.filters-toggle {
+  display: none;
+  align-items: center;
+  gap: 0.45rem;
+}
+.filters-toggle .count {
+  display: inline-grid;
+  place-items: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.3rem;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+/* Layout a due colonne: filtri + risultati */
+.catalog-layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: var(--space-l);
+  align-items: start;
+}
+
+.filters {
+  position: sticky;
+  top: var(--space-m);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-m);
+  padding: var(--space-m);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-l);
+}
+.filters-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.link-clear {
+  background: none;
+  border: 0;
+  color: var(--accent);
+  font-size: var(--step--1);
+  font-weight: 600;
+  padding: 0;
+}
+.link-clear:hover {
+  text-decoration: underline;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.label {
+  font-size: var(--step--1);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-faint);
+}
+.filters select,
+.price-range input {
+  width: 100%;
+  padding: 0.6rem 0.7rem;
+  border-radius: var(--radius-m);
+  border: 1px solid var(--border-strong);
+  background: var(--surface-2);
+  color: var(--text);
+  font-size: var(--step-0);
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+}
+.filters select:focus-visible,
+.price-range input:focus-visible {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: var(--glow);
+}
+.price-range {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.price-range .dash {
+  color: var(--text-faint);
+}
+.price-range input {
+  min-width: 0;
+}
+.field .apply {
+  margin-top: 0.2rem;
+  padding-block: 0.5rem;
+  font-size: var(--step--1);
 }
 .chip {
   padding: 0.5rem 0.85rem;
@@ -95,4 +203,21 @@
   display: flex;
   justify-content: center;
   margin-top: var(--space-xl);
+}
+
+/* Mobile: i filtri diventano un pannello a comparsa via toggle */
+@media (max-width: 880px) {
+  .filters-toggle {
+    display: inline-flex;
+  }
+  .catalog-layout {
+    grid-template-columns: 1fr;
+  }
+  .filters {
+    display: none;
+    position: static;
+  }
+  .filters.is-open {
+    display: flex;
+  }
 }

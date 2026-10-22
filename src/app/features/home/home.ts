@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CatalogService } from '../../core/services/catalog.service';
+import { CatalogService } from '../../core/services/catalog-service/catalog.service';
 import { Category, ProductCard as ProductCardModel } from '../../core/models/catalog.models';
 import { ProductCard } from '../../shared/product-card/product-card';
 

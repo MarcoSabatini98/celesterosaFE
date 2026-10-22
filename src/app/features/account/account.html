@@ -1,0 +1,135 @@
+<section class="container section">
+  <p class="eyebrow">Area personale</p>
+  <h1>Il mio account</h1>
+
+  @if (session.user(); as u) {
+    <!-- PROFILO + STATISTICHE -->
+    <div class="account-grid">
+      <div class="card profile">
+        <div class="avatar" aria-hidden="true">{{ u.first_name.charAt(0) }}{{ u.last_name.charAt(0) }}</div>
+        <div class="who">
+          <span class="name">{{ u.first_name }} {{ u.last_name }}</span>
+          <span class="email mono">{{ u.email }}</span>
+          @if (u.phone) {
+            <span class="phone mono muted">{{ u.phone }}</span>
+          }
+          <span class="role" [class.role--admin]="u.role === 'admin'">
+            {{ u.role === 'admin' ? 'Amministratore' : 'Cliente' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="card stats">
+        <div class="stat">
+          <span class="num mono">{{ orders().length }}</span>
+          <span class="lbl muted">Ordini</span>
+        </div>
+        <div class="stat">
+          <span class="num mono">{{ deliveredCount() }}</span>
+          <span class="lbl muted">Consegnati</span>
+        </div>
+        <div class="stat">
+          <span class="num mono">{{ invoices().length }}</span>
+          <span class="lbl muted">Fatture</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SPEDIZIONE IN CORSO -->
+    @if (ongoing().length) {
+      <section class="block">
+        <h2>Spedizione in corso</h2>
+        <div class="ship-grid">
+          @for (o of ongoing(); track o.id) {
+            <a class="card ship-card" [routerLink]="['/ordini', o.order_number]">
+              <div class="ship-head">
+                <span class="num mono">{{ o.order_number }}</span>
+                <span
+                  class="badge"
+                  [style.color]="statusMap[o.status].color"
+                  [style.borderColor]="statusMap[o.status].color"
+                >
+                  {{ statusMap[o.status].label }}
+                </span>
+              </div>
+              <span class="muted">{{ o.items.length }} articoli · {{ o.grand_total | euro }}</span>
+              @if (o.shipped_at || o.placed_at) {
+                <span class="muted small">{{ (o.shipped_at || o.placed_at) | date: 'd MMM y' }}</span>
+              }
+            </a>
+          }
+        </div>
+      </section>
+    }
+
+    <!-- ORDINI RECENTI -->
+    <section class="block">
+      <div class="block-head">
+        <h2>Ordini recenti</h2>
+        <a routerLink="/ordini" class="link-arrow">Vedi tutti →</a>
+      </div>
+
+      @if (loadingOrders()) {
+        <div class="skeleton-row"></div>
+        <div class="skeleton-row"></div>
+      } @else if (!orders().length) {
+        <p class="muted">Non hai ancora effettuato ordini.</p>
+      } @else {
+        <ul class="ord-list">
+          @for (o of recent(); track o.id) {
+            <li>
+              <a class="ord-row" [routerLink]="['/ordini', o.order_number]">
+                <span class="num mono">{{ o.order_number }}</span>
+                <span
+                  class="badge"
+                  [style.color]="statusMap[o.status].color"
+                  [style.borderColor]="statusMap[o.status].color"
+                >
+                  {{ statusMap[o.status].label }}
+                </span>
+                <span class="date muted">{{ o.placed_at ? (o.placed_at | date: 'd MMM y') : '' }}</span>
+                <span class="total mono">{{ o.grand_total | euro }}</span>
+                <span class="arrow">→</span>
+              </a>
+            </li>
+          }
+        </ul>
+      }
+    </section>
+
+    <!-- FATTURE -->
+    <section class="block">
+      <h2>Fatture</h2>
+      @if (!invoices().length) {
+        <p class="muted">Nessuna fattura disponibile.</p>
+      } @else {
+        <ul class="inv-list">
+          @for (o of invoices(); track o.id) {
+            <li class="inv-row">
+              <span class="num mono">{{ o.invoice!.number }}</span>
+              <span class="muted">Ordine {{ o.order_number }}</span>
+              @if (o.invoice!.pdf_url) {
+                <a [href]="o.invoice!.pdf_url" target="_blank" rel="noopener" class="link-arrow">Scarica PDF ↓</a>
+              } @else {
+                <a [routerLink]="['/ordini', o.order_number]" class="link-arrow">Dettaglio →</a>
+              }
+            </li>
+          }
+        </ul>
+      }
+    </section>
+
+    <!-- AZIONI -->
+    <section class="block actions">
+      @if (session.isAdmin()) {
+        <a routerLink="/admin" class="btn btn--ghost">Area amministrativa</a>
+      }
+      <button type="button" class="btn btn--ghost logout" (click)="logout()">Esci dall'account</button>
+    </section>
+  } @else {
+    <div class="empty">
+      <p class="empty-title">Non sei autenticato</p>
+      <a routerLink="/accedi" class="btn btn--primary">Accedi</a>
+    </div>
+  }
+</section>

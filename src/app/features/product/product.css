@@ -73,6 +73,24 @@
   color: var(--text-muted);
   font-size: var(--step-1);
 }
+
+/* Badge condizione (usato/ricondizionato) */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 0.6rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-strong);
+  font-family: var(--font-mono);
+  font-size: var(--step--1);
+  letter-spacing: 0.04em;
+}
+.badge--cond {
+  color: var(--warn);
+  border-color: color-mix(in srgb, var(--warn) 45%, transparent);
+  background: color-mix(in srgb, var(--warn) 12%, transparent);
+}
 .price-row {
   display: flex;
   align-items: baseline;
@@ -185,9 +203,17 @@
   background: var(--ok);
   box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 22%, transparent);
 }
+.stockline.low {
+  color: var(--warn);
+}
+.stockline.low .dot {
+  background: var(--warn);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--warn) 22%, transparent);
+}
 .link-arrow {
   display: inline-block;
   margin-top: var(--space-s);
+  margin-right: 40px;
   color: var(--accent);
   font-weight: 600;
 }
@@ -237,8 +263,18 @@
   gap: var(--space-xl);
 }
 .ph {
-  background: var(--surface-2);
   border-radius: var(--radius-l);
+  background: linear-gradient(100deg, var(--surface) 30%, var(--surface-2) 50%, var(--surface) 70%);
+  background-size: 200% 100%;
+  animation: ph-shimmer 1.4s var(--ease-in-out) infinite;
+}
+@keyframes ph-shimmer {
+  from {
+    background-position: 200% 0;
+  }
+  to {
+    background-position: -200% 0;
+  }
 }
 .ph-img {
   aspect-ratio: 1;
